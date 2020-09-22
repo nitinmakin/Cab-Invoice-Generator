@@ -8,7 +8,10 @@ namespace NUnitTestCabInvoice
     /// </summary>
     public class Tests
     {
-        CabInvoiceMain cabInvoiceMain = null;
+        /// <summary>
+        /// initialize null
+        /// </summary>
+       private CabInvoiceMain cabInvoiceMain = null;
 
         /// <summary>
         /// setup method to create object of main class
@@ -16,16 +19,27 @@ namespace NUnitTestCabInvoice
         [SetUp]
         public void Setup()
         {
-            cabInvoiceMain = new CabInvoiceMain();
+            this.cabInvoiceMain = new CabInvoiceMain();
         }
 
         /// <summary>
-        /// test method
+        /// test method for positive 
         /// </summary>
         [Test]
-        public void Test1()
+        public void GivenDistanceAndTime_shouldReturnTotalFareOfJourny()
         {
-            Assert.Pass();
+            double result = this.cabInvoiceMain.GetTotakFare(2, 10);
+            Assert.AreEqual(30, result);
+        }
+
+        /// <summary>
+        /// test method for negative
+        /// </summary>
+        [Test]
+        public void GivenDistanceAndTime_shouldReturnTotalFareOfJournyNegative()
+        {
+            double result = this.cabInvoiceMain.GetTotakFare(2, 10);
+            Assert.AreNotEqual(20, result);
         }
     }
 }
