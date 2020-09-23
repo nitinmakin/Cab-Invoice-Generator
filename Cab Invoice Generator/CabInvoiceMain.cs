@@ -4,67 +4,40 @@
     using System.Collections.Generic;
     using System.Text;
 
-    /// <summary>
-    /// Main Class
-    /// </summary>
-    public class CabInvoiceMain
+   public class CabInvoiceMain
     {
-        /// <summary>
-        /// cost per km
-        /// </summary>
-      private double costPerKm = 10;
-
-        /// <summary>
-        /// cost per min
-        /// </summary>
-       private double costPerMin = 1;
-
-        /// <summary>
-        /// min fare
-        /// </summary>
-        private double minFare = 5;
-
-        /// <summary>
-        /// main method
-        /// </summary>
-        /// <param name="km">km parameter.</param>
-        /// <param name="time">time parameter.</param>
-        /// <returns>returns cost</returns>
-        public double GetTotalFare(double km, double time)
+        public double CalculateFare(double distance, int time, string type)
         {
-            double result = (km * this.costPerKm) + (time * this.costPerMin);
-            return Math.Max(this.minFare, result);          
-        }
-
-        /// <summary>
-        /// to calculate multiple rides
-        /// </summary>
-        /// <param name="rides">to take multiple rides</param>
-        /// <returns>return result.</returns>
-        public double GetTotxalFare(Ride[] rides)
-        {
-            double totalFare = 0;
-         foreach (Ride item in rides)
+            RideType rideType = new RideType(type);
+            double totalFare = (distance * rideType.MINIMUMCOSTPERKILOMETER) + (time * rideType.COSTPERTIME);
+            if (totalFare < rideType.MINIMUMFARE)
             {
-                totalFare += this.GetTotalFare(item.Distance, item.Time);
+                return rideType.MINIMUMFARE;
             }
 
             return totalFare;
         }
 
-        /// <summary>
-        /// to calculate multiple ride
-        /// </summary>
-        /// <param name="rides">to get rides.</param>
-        /// <returns>multiple rides summary.</returns>
-        public InvoiceSummary CalculateFare(Ride[] rides)
+        public InvoiceSummary GetInvoiceSummary(string userId)
         {
+            InvoiceSummary invoiceSummary = new InvoiceSummary();
             double totalFare = 0;
-            foreach (Ride ride in rides)
+            int numberOfRides = 0;
+
+            if (UserAccount.ACCOUNTS.ContainsKey(userId))
             {
-                totalFare = totalFare + this.GetTotalFare(ride.Distance, ride.Time);
+                foreach (Rides ride in UserAccount.ACCOUNTS[userId])
+                {
+                    totalFare += this.CalculateFare(ride.DISTANCE, ride.TIME, ride.RIDETYPE);
+                    numberOfRides++;
+                }
             }
-            return new InvoiceSummary(rides.Length, totalFare);
+
+            invoiceSummary.TotalNumberOfRides = numberOfRides;
+            invoiceSummary.TotalFare = totalFare;
+            invoiceSummary.CalculateAvergaeFare();
+            return invoiceSummary;
         }
     }
+    
 }

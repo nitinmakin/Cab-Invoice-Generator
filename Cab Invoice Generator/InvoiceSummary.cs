@@ -3,30 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+
+    /// <summary>
+    /// Invoice summary class
+    /// </summary>
     public class InvoiceSummary
     {
-        public double NoOfRides;
-        public double Fare;
-        public double Avg;
+        public int TotalNumberOfRides { get; set; }
 
-        public InvoiceSummary(double NoOfRides, double Fare)
-        {
-            this.NoOfRides = NoOfRides;
-            this.Fare = Fare;
-            this.Avg = Fare/NoOfRides;
-        }
+        public double TotalFare { get; set; }
 
-        /// <summary>
-        /// equals method to check objects
-        /// </summary>
-        /// <param name="obj">object parameter.</param>
-        /// <returns>returns boolean true</returns>
-        public override bool Equals(object obj)
+        public double AverageFarePerRide { get; set; }
+
+        public void CalculateAvergaeFare()
         {
-            return obj is InvoiceSummary summary &&
-                   NoOfRides == summary.NoOfRides &&
-                   Fare == summary.Fare &&
-                   Avg == summary.Avg;
+            this.AverageFarePerRide = this.TotalFare / this.TotalNumberOfRides;
         }
     }
 }

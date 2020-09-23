@@ -1,92 +1,90 @@
 namespace NUnitTestCabInvoice
 {
-    using Cab_Invoice_Generator;
     using NUnit.Framework;
+    using Cab_Invoice_Generator;  
     using System.Resources;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Test class
     /// </summary>
     public class Tests
     {
-        /// <summary>
-        /// initialize null
-        /// </summary>
-       private CabInvoiceMain cabInvoiceMain = null;
-
-        /// <summary>
-        /// setup method to create object of main class
-        /// </summary>
         [SetUp]
         public void Setup()
         {
-            this.cabInvoiceMain = new CabInvoiceMain();
+        }
+        CabInvoiceMain invoiceGenerator = new CabInvoiceMain();
+
+        [Test]
+        public void GivenDistanceAndTime_ShouldReturnTotalFare()
+        {
+            double distance = 2.0;
+            int time = 5;
+            string type = "Normal";
+            double fare = invoiceGenerator.CalculateFare(distance, time, type);
+            double expected = 25;
+            Assert.AreEqual(expected, fare);
         }
 
-        /// <summary>
-        /// test method for positive 
-        /// </summary>
         [Test]
-        public void GivenDistanceAndTime_shouldReturnTotalFareOfJourny()
+        public void GivenLessDistanceAndTime_ShouldReturnMinFare()
         {
-            double result = this.cabInvoiceMain.GetTotalFare(2, 10);
-            Assert.AreEqual(30, result);
+            double distance = 0.1;
+            int time = 1;
+            string type = "Normal";
+            double fare = invoiceGenerator.CalculateFare(distance, time, type);
+            double expected = 5;
+            Assert.AreEqual(expected, fare);
         }
 
-        /// <summary>
-        /// test method for negative
-        /// </summary>
         [Test]
-        public void GivenDistanceAndTime_shouldReturnTotalFareOfJournyNegative()
+        public void GivenMultipleRides_ShouldReturnTotalFare()
         {
-            double result = this.cabInvoiceMain.GetTotalFare(2, 10);
-            Assert.AreNotEqual(20, result);
+            string userId = "nitin";
+            Rides firstRide = new Rides(2.0, 5, "Premium");
+            Rides secondRide = new Rides(0.1, 1, "Normal");
+            List<Rides> rides = new List<Rides> { firstRide, secondRide };
+            UserAccount.AddRides(userId, rides);
+            InvoiceSummary invoiceSummary = invoiceGenerator.GetInvoiceSummary(userId);
+            double expected = 30;
+            Assert.AreEqual(expected, invoiceSummary.TotalFare);
         }
 
-        /// <summary>
-        /// test method for positive
-        /// </summary>
         [Test]
-        public void GivenMultipleInvoiceFare_shouldReturnTotalFareOfJourny()
+        public void GivenUSerId_ShouldReturnInvoiceSummary()
         {
-            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
-            double result = this.cabInvoiceMain.GetTotxalFare(rides);
-            Assert.AreEqual(30, result);
+            string userId = "nitin";
+            Rides firstRide = new Rides(3.0, 5, "Premium");
+            Rides secondRide = new Rides(1, 1, "Normal");
+            List<Rides> rides = new List<Rides> { firstRide, secondRide };
+            UserAccount.AddRides(userId, rides);
+            InvoiceSummary invoiceSummary = invoiceGenerator.GetInvoiceSummary(userId);
+            InvoiceSummary expected = new InvoiceSummary
+            {
+                TotalNumberOfRides = 2,
+                TotalFare = 46,
+                AverageFarePerRide = 23
+            };
+            object.Equals(expected, invoiceSummary);
         }
 
-        /// <summary>
-        /// test method for negative
-        /// </summary>
         [Test]
-        public void GivenMultipleInvoiceFare_shouldReturnTotalFareOfJournyNegative()
+        public void GivenPremiumRide_ShouldReturnInvoiceSummary()
         {
-            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
-            double result = this.cabInvoiceMain.GetTotxalFare(rides);
-            Assert.AreNotEqual(20, result);
+            string userId = "nitin";
+            Rides firstRide = new Rides(3.0, 5, "Premium");
+            Rides secondRide = new Rides(1, 1, "Normal");
+            List<Rides> rides = new List<Rides> { firstRide, secondRide };
+            UserAccount.AddRides(userId, rides);
+            InvoiceSummary invoiceSummary = invoiceGenerator.GetInvoiceSummary(userId);
+            InvoiceSummary expected = new InvoiceSummary
+            {
+                TotalNumberOfRides = 2,
+                TotalFare = 76.0,
+                AverageFarePerRide = 33
+            };
+            Assert.AreEqual(expected.TotalFare, invoiceSummary.TotalFare);
         }
-
-        /// <summary>
-        /// test method for positive
-        /// </summary>
-        [Test]
-        public void GivenMultipleInvoiceFare_shouldReturnTMultipleFields()
-        {
-            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
-            InvoiceSummary result = cabInvoiceMain.CalculateFare(rides);
-            InvoiceSummary expectedinvoiceSummary = new InvoiceSummary(2, 30);
-            Assert.AreEqual(expectedinvoiceSummary, result);
-        }
-
-        /// <summary>
-        /// test method for negative
-        /// </summary>
-        [Test]
-        public void GivenMultipleInvoiceFare_shouldReturnTMultipleFieldsNegative()
-        {
-            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
-            InvoiceSummary result = cabInvoiceMain.CalculateFare(rides);
-            InvoiceSummary expectedinvoiceSummary = new InvoiceSummary(1, 30);
-            Assert.AreNotEqual(expectedinvoiceSummary, result);
-        }
-    }
+    }    
 }
