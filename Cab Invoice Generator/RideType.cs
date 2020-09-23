@@ -1,17 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="RideType.cs" company="CompanyName">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 namespace Cab_Invoice_Generator
 {
-    class RideType
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    /// <summary>
+    /// ride type class
+    /// </summary>
+    public class RideType
     {
+        /// <summary>
+        /// normal ride
+        /// </summary>
         public static readonly string NORMALRIDE = "Normal";
+
+        /// <summary>
+        /// premium ride
+        /// </summary>
         public static readonly string PREMIUMRIDE = "Premium";
+
+        /// <summary>
+        /// cost per time
+        /// </summary>
         public readonly int COSTPERTIME;
+
+        /// <summary>
+        /// min and max cost per km
+        /// </summary>
         public readonly double MINIMUMCOSTPERKILOMETER;
+
+        /// <summary>
+        /// min fare
+        /// </summary>
         public readonly double MINIMUMFARE;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RideType" /> class.
+        /// </summary>
+        /// <param name="rideType">type of ride.</param>
         public RideType(string rideType)
         {
             if (rideType.ToLower() == PREMIUMRIDE)
