@@ -2,6 +2,7 @@ namespace NUnitTestCabInvoice
 {
     using Cab_Invoice_Generator;
     using NUnit.Framework;
+    using System.Resources;
 
     /// <summary>
     /// Test class
@@ -62,6 +63,30 @@ namespace NUnitTestCabInvoice
             Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
             double result = this.cabInvoiceMain.GetTotxalFare(rides);
             Assert.AreNotEqual(20, result);
+        }
+
+        /// <summary>
+        /// test method for positive
+        /// </summary>
+        [Test]
+        public void GivenMultipleInvoiceFare_shouldReturnTMultipleFields()
+        {
+            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
+            InvoiceSummary result = cabInvoiceMain.CalculateFare(rides);
+            InvoiceSummary expectedinvoiceSummary = new InvoiceSummary(2, 30);
+            Assert.AreEqual(expectedinvoiceSummary, result);
+        }
+
+        /// <summary>
+        /// test method for negative
+        /// </summary>
+        [Test]
+        public void GivenMultipleInvoiceFare_shouldReturnTMultipleFieldsNegative()
+        {
+            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
+            InvoiceSummary result = cabInvoiceMain.CalculateFare(rides);
+            InvoiceSummary expectedinvoiceSummary = new InvoiceSummary(1, 30);
+            Assert.AreNotEqual(expectedinvoiceSummary, result);
         }
     }
 }

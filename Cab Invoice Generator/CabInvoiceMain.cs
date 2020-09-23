@@ -33,14 +33,7 @@
         public double GetTotalFare(double km, double time)
         {
             double result = (km * this.costPerKm) + (time * this.costPerMin);
-            if (result < this.minFare)
-            {
-                return this.minFare;
-            }
-            else
-            {
-                return result;
-            }
+            return Math.Max(this.minFare, result);          
         }
 
         /// <summary>
@@ -57,6 +50,21 @@
             }
 
             return totalFare;
+        }
+
+        /// <summary>
+        /// to calculate multiple ride
+        /// </summary>
+        /// <param name="rides">to get rides.</param>
+        /// <returns>multiple rides summary.</returns>
+        public InvoiceSummary CalculateFare(Ride[] rides)
+        {
+            double totalFare = 0;
+            foreach (Ride ride in rides)
+            {
+                totalFare = totalFare + this.GetTotalFare(ride.Distance, ride.Time);
+            }
+            return new InvoiceSummary(rides.Length, totalFare);
         }
     }
 }
