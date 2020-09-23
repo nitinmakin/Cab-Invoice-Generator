@@ -28,7 +28,7 @@ namespace NUnitTestCabInvoice
         [Test]
         public void GivenDistanceAndTime_shouldReturnTotalFareOfJourny()
         {
-            double result = this.cabInvoiceMain.GetTotakFare(2, 10);
+            double result = this.cabInvoiceMain.GetTotalFare(2, 10);
             Assert.AreEqual(30, result);
         }
 
@@ -38,7 +38,29 @@ namespace NUnitTestCabInvoice
         [Test]
         public void GivenDistanceAndTime_shouldReturnTotalFareOfJournyNegative()
         {
-            double result = this.cabInvoiceMain.GetTotakFare(2, 10);
+            double result = this.cabInvoiceMain.GetTotalFare(2, 10);
+            Assert.AreNotEqual(20, result);
+        }
+
+        /// <summary>
+        /// test method for positive
+        /// </summary>
+        [Test]
+        public void GivenMultipleInvoiceFare_shouldReturnTotalFareOfJourny()
+        {
+            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
+            double result = this.cabInvoiceMain.GetTotxalFare(rides);
+            Assert.AreEqual(30, result);
+        }
+
+        /// <summary>
+        /// test method for negative
+        /// </summary>
+        [Test]
+        public void GivenMultipleInvoiceFare_shouldReturnTotalFareOfJournyNegative()
+        {
+            Ride[] rides = { new Ride(2, 5), new Ride(0.1, 1) };
+            double result = this.cabInvoiceMain.GetTotxalFare(rides);
             Assert.AreNotEqual(20, result);
         }
     }

@@ -30,7 +30,7 @@
         /// <param name="km">km parameter.</param>
         /// <param name="time">time parameter.</param>
         /// <returns>returns cost</returns>
-        public double GetTotakFare(double km, double time)
+        public double GetTotalFare(double km, double time)
         {
             double result = (km * this.costPerKm) + (time * this.costPerMin);
             if (result < this.minFare)
@@ -40,7 +40,23 @@
             else
             {
                 return result;
-            }             
+            }
+        }
+
+        /// <summary>
+        /// to calculate multiple rides
+        /// </summary>
+        /// <param name="rides">to take multiple rides</param>
+        /// <returns>return result.</returns>
+        public double GetTotxalFare(Ride[] rides)
+        {
+            double totalFare = 0;
+         foreach (Ride item in rides)
+            {
+                totalFare += this.GetTotalFare(item.Distance, item.Time);
+            }
+
+            return totalFare;
         }
     }
 }
